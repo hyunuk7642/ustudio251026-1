@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 미래 직업 찾기 🚀</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .option {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            display: block;
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .option label:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #28a745;
+        }
+
+        .result h3 {
+            color: #28a745;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .result-content {
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #dc3545;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .name-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .name-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .name-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 슬라이더 스타일 */
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .slider-value {
+            min-width: 60px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 나의 미래 직업 찾기</h1>
+            <p>20개의 간단한 질문으로 당신에게 딱 맞는 직업을 찾아보세요!</p>
+        </div>
+
+        <div class="content">
+            <div class="name-section">
+                <h3>🔑 사용할 AI API 키를 입력하세요</h3>
+                <input type="text" id="apiKey" name="apiKey" placeholder="OpenAI 또는 Google Gemini API 키" required class="name-input" style="margin-bottom:15px;">
+                <div style="margin: 15px 0 0 0;">
+                  <label style="margin-right: 20px; font-weight:500;">
+                    <input type="radio" name="model" value="gpt" checked> GPT (OpenAI)
+                  </label>
+                  <label style="font-weight:500;">
+                    <input type="radio" name="model" value="gemini"> Gemini (Google)
+                  </label>
+                </div>
+            </div>
+            <div class="name-section">
+                <h3>👋 당신의 이름을 알려주세요</h3>
+                <input type="text" id="userName" name="userName" placeholder="이름을 입력하세요" required class="name-input">
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form id="careerForm">
+                {% for question in questions %}
+                <div class="question-container" id="question-{{ loop.index0 }}">
+                    <div class="question">
+                        <span class="emoji">❓</span>{{ question }}
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-labels">
+                            <span class="slider-min">매우 그렇지 않다</span>
+                            <span class="slider-max">매우 그렇다</span>
+                        </div>
+                        <div class="slider-wrapper">
+                            <input type="range" 
+                                   id="q{{ loop.index0 }}" 
+                                   name="q{{ loop.index0 }}" 
+                                   min="1" 
+                                   max="50" 
+                                   value="25" 
+                                   class="slider" 
+                                   required>
+                            <div class="slider-value" id="value{{ loop.index0 }}">25점</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 직업 추천 받기
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>AI가 당신의 답변을 분석하고 있습니다...</p>
+                <p>잠시만 기다려주세요! 🤖</p>
+            </div>
+
+            <div class="result" id="result">
+                <h3>🎉 당신에게 추천하는 직업</h3>
+                <div class="result-content" id="resultContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('careerForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const resultContent = document.getElementById('resultContent');
+        const progressFill = document.getElementById('progressFill');
+
+        // 진행률 업데이트
+        function updateProgress() {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            let answered = 0;
+            sliders.forEach(slider => {
+                if (slider.value !== '25') { // 기본값이 아닌 경우 답변한 것으로 간주
+                    answered++;
+                }
+            });
+            const progress = (answered / 20) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        // 슬라이더 변경 시 진행률 업데이트 및 점수 표시
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', function() {
+                const questionIndex = this.id.replace('q', '');
+                const valueDisplay = document.getElementById(`value${questionIndex}`);
+                valueDisplay.textContent = this.value + '점';
+                updateProgress();
+            });
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // 이름 확인
+            const userName = document.getElementById('userName').value.trim();
+            if (!userName) {
+                alert('이름을 입력해주세요!');
+                return;
+            }
+            // API 키 확인
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!apiKey) {
+                alert('API 키를 입력해주세요!');
+                return;
+            }
+            // 모델 선택
+            const model = document.querySelector('input[name="model"]:checked').value;
+            
+            const answers = [];
+            for (let i = 0; i < 20; i++) {
+                const slider = document.querySelector(`input[name="q${i}"]`);
+                if (!slider) {
+                    alert('모든 질문에 답변해주세요!');
+                    return;
+                }
+                answers.push(slider.value);
+            }
+
+            // UI 상태 변경
+            submitBtn.disabled = true;
+            submitBtn.textContent = '분석 중...';
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        answers: answers,
+                        userName: userName,
+                        apiKey: apiKey,
+                        model: model
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        resultContent.textContent = data.recommendation;
+                        result.style.display = 'block';
+                    }
+                } else {
+                    throw new Error(data.error || '분석 중 오류가 발생했습니다.');
+                }
+
+            } catch (error) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.textContent = '오류: ' + error.message;
+                form.appendChild(errorDiv);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 직업 추천 받기';
+                loading.style.display = 'none';
+            }
+        });
+
+        // 초기 진행률 설정
+        updateProgress();
+    </script>
+</body>
+</html> 

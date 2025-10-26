@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 미래 직업 찾기 - 결과 🎯</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        /* Notion 스타일 Markdown */
+        .markdown-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #37352f;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8e8e8;
+            color: #37352f;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            color: #37352f;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .markdown-content h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            color: #37352f;
+        }
+
+        .markdown-content p {
+            margin: 15px 0;
+            color: #37352f;
+        }
+
+        .markdown-content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .markdown-content li {
+            margin: 8px 0;
+            color: #37352f;
+        }
+
+        .markdown-content strong {
+            font-weight: 600;
+            color: #37352f;
+        }
+
+        .markdown-content em {
+            font-style: italic;
+            color: #666;
+        }
+
+        /* 직업 카드 스타일 */
+        .job-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .job-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .job-title::before {
+            content: "💼";
+            font-size: 1.2em;
+        }
+
+        .job-detail {
+            margin: 12px 0;
+            padding: 8px 0;
+        }
+
+        .job-detail strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .compatibility-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .compatibility-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .compatibility-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .compatibility-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* 성향 분석 섹션 */
+        .personality-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .personality-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .personality-title::before {
+            content: "🧠";
+            font-size: 1.2em;
+        }
+
+        /* 조언 섹션 */
+        .advice-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 5px solid #ffc107;
+        }
+
+        .advice-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .advice-title::before {
+            content: "💡";
+            font-size: 1.2em;
+        }
+
+        /* 버튼 스타일 */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .markdown-content {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .job-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .job-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .job-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 나의 미래 직업 찾기</h1>
+            <p id="userGreeting">당신에게 딱 맞는 직업을 찾았습니다!</p>
+        </div>
+
+        <div class="content">
+            <div class="markdown-content" id="resultContent">
+                <!-- 결과 내용이 여기에 동적으로 삽입됩니다 -->
+            </div>
+
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">🏠 처음으로 돌아가기</a>
+                <button onclick="window.print()" class="btn btn-secondary">🖨️ 결과 인쇄하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터에서 결과 데이터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultData = urlParams.get('data');
+        
+        if (resultData) {
+            try {
+                const data = JSON.parse(decodeURIComponent(resultData));
+                
+                // 사용자 이름 표시
+                if (data.userName) {
+                    document.getElementById('userGreeting').textContent = `${data.userName} 학생에게 딱 맞는 직업을 찾았습니다!`;
+                }
+                
+                document.getElementById('resultContent').innerHTML = formatMarkdown(data.recommendation);
+            } catch (e) {
+                document.getElementById('resultContent').innerHTML = '<p>결과를 불러오는 중 오류가 발생했습니다.</p>';
+            }
+        }
+
+        function formatMarkdown(markdown) {
+            // Markdown을 HTML로 변환
+            let html = markdown
+                // 추천 직업 헤더 제거 (직업 카드로 대체)
+                .replace(/^## 추천 직업\n\n/g, '')
+                
+                // 직업 카드 변환
+                .replace(/^### (\d+)\. (.*$)/gim, '<div class="job-card"><div class="job-title">$2</div>')
+                
+                // 직업 세부사항 변환
+                .replace(/^- \*\*(.*?)\*\*: (.*$)/gim, '<div class="job-detail"><strong>$1</strong>: $2</div>')
+                
+                // 성향 분석 섹션
+                .replace(/^## 성향 분석\n(.*?)(?=\n##|$)/gims, '<div class="personality-section"><div class="personality-title">성향 분석</div><p>$1</p></div>')
+                
+                // 조언 섹션
+                .replace(/^## 추가 조언\n(.*?)(?=\n##|$)/gims, '<div class="advice-section"><div class="advice-title">추가 조언</div><p>$1</p></div>')
+                
+                // 적합도 배지 추가
+                .replace(/적합도: (매우 높음|높음|보통|낮음|매우 낮음)/g, function(match, level) {
+                    let className = 'compatibility-medium';
+                    if (level === '매우 높음' || level === '높음') {
+                        className = 'compatibility-high';
+                    } else if (level === '낮음' || level === '매우 낮음') {
+                        className = 'compatibility-low';
+                    }
+                    return `적합도: <span class="compatibility-badge ${className}">${level}</span>`;
+                })
+                
+                // 직업 카드 닫기 태그 추가
+                .replace(/(<div class="job-card">.*?)(?=<div class="personality-section|<div class="advice-section"|$)/gims, '$1</div>')
+                
+                // 빈 줄 정리
+                .replace(/\n\n+/g, '\n\n')
+                .trim();
+            
+            return html;
+        }
+    </script>
+</body>
+</html> 
